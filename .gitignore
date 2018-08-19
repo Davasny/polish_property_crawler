@@ -102,4 +102,4 @@ ENV/
 .mypy_cache/
 .idea/
 timetable.json
-.xlsx
+*.xlsx
