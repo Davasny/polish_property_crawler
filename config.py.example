@@ -1,0 +1,9 @@
+LOG_LEVEL = "INFO"
+
+MYSQL = {
+  "user": "root",
+  "password": "root",
+  "host": "localhost",
+  "port": "3306",
+  "db": "crawler"
+}
