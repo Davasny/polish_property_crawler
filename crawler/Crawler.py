@@ -84,8 +84,7 @@ class Crawler:
                     parser = ParserOtodom(f.read())
                     params = parser.parse_site()
 
-                o = Offer(**params)
                 instance = session.query(Offer).filter(Offer.offer_id == params['offer_id']).first()
                 if not instance:
-                    session.add(o)
+                    session.add(Offer(**params))
             counter += 1
