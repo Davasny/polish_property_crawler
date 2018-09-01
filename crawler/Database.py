@@ -1,8 +1,9 @@
 import pymysql
 import config
 from sqlalchemy import create_engine
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.dialects.mysql import JSON, LONGTEXT, TIMESTAMP, DECIMAL, DOUBLE
+from sqlalchemy import Column, Integer, String, text
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.dialects.mysql import JSON, LONGTEXT, TIMESTAMP, DECIMAL, DOUBLE, DATETIME
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -31,7 +32,7 @@ class Offer(Base):
     seller_id = Column(Integer)
 
     available_since = Column(TIMESTAMP)
-    build_year = Column(TIMESTAMP)
+    build_year = Column(DATETIME)
 
     equipment = Column(JSON)
     extras_surface = Column(JSON)
