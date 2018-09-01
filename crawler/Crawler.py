@@ -16,7 +16,7 @@ class Crawler:
 
         services = [
             "otodom",
-            # "gratka"
+            "gratka"
         ]
 
         if download:
