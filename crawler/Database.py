@@ -27,7 +27,7 @@ class Offer(Base):
     surface_land = Column(DECIMAL(11, 6))
     surface_useful = Column(DECIMAL(11, 6))
 
-    floor_num = Column(Integer)
+    floor_num = Column(String(200))
     offer_id = Column(Integer, unique=True)
     seller_id = Column(Integer)
 
