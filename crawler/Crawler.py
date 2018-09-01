@@ -65,12 +65,6 @@ class Crawler:
         filer = Filer("{}/{}".format(download_path, download_path_offers))
         all_files = filer.get_all_files()
 
-        mysql = MySQL()
-
-        tmp_k = {
-            "gratka": {},
-            "otodom": {}
-        }
 
         for file in all_files:
             params = {}
@@ -79,21 +73,11 @@ class Crawler:
                     log.debug("Parsing file:\t{}".format(file))
                     parser = ParserGratka(f.read())
                     params = parser.parse_site()
-                    for k, v in params.items():
-                        if k not in tmp_k["gratka"]:
-                            tmp_k["gratka"][k] = str(v)
-
-                    for k, v in params['json_string'].items():
-                        if k not in tmp_k["gratka"]:
-                            tmp_k["gratka"][k] = str(v)
 
                 elif "otodom" in file:
                     log.debug("Parsing file:\t{}".format(file))
                     parser = ParserOtodom(f.read())
                     params = parser.parse_site()
-                    for k, v in params.items():
-                        if k not in tmp_k["otodom"]:
-                            tmp_k["otodom"][k] = str(v)
 
                 for k, v in params.items():
                     if isinstance(v, list):
