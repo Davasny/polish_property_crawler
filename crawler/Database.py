@@ -1,4 +1,5 @@
 import pymysql
+import config
 from sqlalchemy import create_engine
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.dialects.mysql import JSON, LONGTEXT, TIMESTAMP, DECIMAL, DOUBLE
@@ -82,6 +83,13 @@ class Offer(Base):
 
 
 engine = create_engine('mysql://root:@localhost/otodom_crawler', echo=True)
+engine = create_engine('mysql://{}:{}@{}:{}/{}'.format(
+    config.MYSQL['user'],
+    config.MYSQL['password'],
+    config.MYSQL['host'],
+    config.MYSQL['port'],
+    config.MYSQL['db'])
+)
 
 Base.metadata.create_all(engine)
 
