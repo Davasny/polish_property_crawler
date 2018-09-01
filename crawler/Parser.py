@@ -127,8 +127,7 @@ class ParserGratka:
                         k = tag.find("p", {"class": "parameters__label"}).text.strip()
                         v = tag.find("b", {"class": "parameters__multiValue"}).text.strip()
                         params["json_string"][k] = v
-
-
+        
         params["Price"] = self.get_price()
         params["description"] = self.get_description()
         params["latitude"], params["longitude"] = self.get_coords()
