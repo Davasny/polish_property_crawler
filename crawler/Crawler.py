@@ -2,7 +2,7 @@ from crawler.Downloader import Downloader
 from crawler.Filer import Filer
 from crawler.Scraper import Scraper
 from crawler.Parser import ParserOtodom, ParserGratka
-from crawler.Database import MySQL
+from crawler.Database import session, Offer
 import logging
 
 log = logging.getLogger("main")
@@ -65,9 +65,14 @@ class Crawler:
         filer = Filer("{}/{}".format(download_path, download_path_offers))
         all_files = filer.get_all_files()
 
+        counter = 0
 
         for file in all_files:
+            if counter == 50:
+                session.commit()
+                counter = 0
             params = {}
+
             with open("{}/{}/{}".format(download_path, download_path_offers, file), "r", encoding="utf-8") as f:
                 if "gratka" in file:
                     log.debug("Parsing file:\t{}".format(file))
@@ -79,16 +84,8 @@ class Crawler:
                     parser = ParserOtodom(f.read())
                     params = parser.parse_site()
 
-                for k, v in params.items():
-                    if isinstance(v, list):
-                        params[k] = ",".join(v)
-
-                keys = [key for key in params]
-                vals = [str(val).replace("\"", '\\"') for key, val in params.items()]
-
-                keys_string = "`" + "`,`".join(keys) + "`"
-                vals_string = "\"" + "\",\"".join(vals) + "\""
-
-                query = "INSERT IGNORE INTO `offers` ({}) VALUES ({})".format(keys_string, vals_string)
-                new_row_id = mysql.new_query(query)
-                log.debug("Inserted row:\t{}".format(new_row_id))
+                o = Offer(**params)
+                instance = session.query(Offer).filter(Offer.offer_id == params['offer_id']).first()
+                if not instance:
+                    session.add(o)
+            counter += 1
