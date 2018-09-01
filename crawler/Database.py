@@ -11,7 +11,7 @@ Base = declarative_base()
 class Offer(Base):
     __tablename__ = 'polish_property_crawler'
     id = Column(Integer, primary_key=True)
-    added_time = Column(TIMESTAMP, nullable=False)
+    added_time = Column(TIMESTAMP, nullable=False, server_default=text('CURRENT_TIMESTAMP'))
 
     title = Column(String(400))
     description = Column(LONGTEXT)
