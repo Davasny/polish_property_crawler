@@ -4,6 +4,7 @@ import json
 import base64
 import logging
 import datetime
+import re
 
 log = logging.getLogger("main")
 
@@ -76,7 +77,10 @@ class ParserOtodom:
         params["title"] = base64.b64decode(params["title"]).decode("utf-8")
 
         if "build_year" in params:
-            params["build_year"] = datetime.datetime.strptime(params['build_year'], "%Y")
+            if re.match(r"\d{4}", params["build_year"]):
+                params["build_year"] = datetime.datetime.strptime(params['build_year'], "%Y")
+            else:
+                del params["build_year"]
 
         return params
 
