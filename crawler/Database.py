@@ -81,6 +81,8 @@ class Offer(Base):
     windows_type = Column(String(200))
     world_orientation = Column(String(200))
 
+    unknown = Column(JSON)
+
 
 engine = create_engine('mysql://root:@localhost/otodom_crawler', echo=True)
 engine = create_engine('mysql://{}:{}@{}:{}/{}'.format(
