@@ -85,8 +85,7 @@ class Offer(Base):
     unknown = Column(JSON)
 
 
-engine = create_engine('mysql://root:@localhost/otodom_crawler', echo=True)
-engine = create_engine('mysql://{}:{}@{}:{}/{}'.format(
+engine = create_engine('mysql://{}:{}@{}:{}/{}?charset=utf8'.format(
     config.MYSQL['user'],
     config.MYSQL['password'],
     config.MYSQL['host'],
