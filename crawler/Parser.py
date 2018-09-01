@@ -108,6 +108,56 @@ class ParserOtodom:
 
 class ParserGratka:
     def __init__(self, site_string):
+        self.map = {
+            "Bezpieczeństwo": "security_types",
+            "Czy mieszkanie ma łazienkę?": "bathroom",
+            "Dach": "roof",
+            "description": "description",
+            "Dostępność od": "available_since",
+            "Droga dojazdowa": "road_material",
+            "Edukacja": "neighborhood_education",
+            "Elewacja": "building_elevation",
+            "Forma / wyposażenie łazienki": "bathroom_equipment",
+            "Forma kuchni": "kitchen_type",
+            "Forma własności": "property_type",
+            "Głośność": "loudness",
+            "Kanalizacja": "sewers",
+            "Komunikacja": "neighborhood_public_transport",
+            "Kształt działki": "area_shape",
+            "latitude": "latitude",
+            "Liczba miejsc parkingowych": "parking_spot_num",
+            "Liczba pięter w budynku": "building_floors_num",
+            "Liczba pokoi": "rooms_num",
+            "Liczba pomieszczeń": "physical_rooms_num",
+            "longitude": "longitude",
+            "Materiał budynku": "building_material",
+            "Media": "media",
+            "Miejsce parkingowe": "parking_spot",
+            "Nazwa inwestycji": "investment_name",
+            "offer_id": "offer_id",
+            "Ogrodzenie działki": "area_fence",
+            "Ogrzewanie i energia": "heating",
+            "Okna": "windows_type",
+            "Piętro": "floor_num",
+            "Poddasze": "attic",
+            "Podpiwniczenie": "basement",
+            "Powierzchnia dodatkowa": "extras_surface",
+            "Powierzchnia działki w m2": "surface_land",
+            "Powierzchnia użytkowa w m2": "surface_useful",
+            "Powierzchnia w m2": "surface",
+            "Pozostałe": "neighborhood_others",
+            "Price": "price",
+            "region_name": "region_name",
+            "Rok budowy": "build_year",
+            "source": "source",
+            "Stan": "construction_status",
+            "Stan instalacji": "installation_state",
+            "Stan łazienki": "bathroom_state",
+            "title": "title",
+            "Typ zabudowy": "building_type",
+            "Usytuowanie względem stron świata": "world_orientation",
+            "Zdrowie i uroda": "neighborhood_health"
+        }
         if len(site_string) > 0:
             self.soup = bs(site_string, 'html.parser')
 
@@ -127,8 +177,16 @@ class ParserGratka:
                         k = tag.find("p", {"class": "parameters__label"}).text.strip()
                         v = tag.find("b", {"class": "parameters__multiValue"}).text.strip()
                         params["json_string"][k] = v
-        
-        params["Price"] = self.get_price()
+
+        for key, val in params["json_string"].items():
+            if key in self.map:
+                params[self.map[key]] = val
+            else:
+                if 'unknown' not in params:
+                    params['unknown'] = []
+                params['unknown'].append({key: val})
+
+        params["price"] = self.get_price()
         params["description"] = self.get_description()
         params["latitude"], params["longitude"] = self.get_coords()
         params["source"] = "gratka"
@@ -136,12 +194,19 @@ class ParserGratka:
         params["city_name"], params["region_name"] = self.parse_localization(params["json_string"]["Lokalizacja"])
         params["title"] = self.get_title()
 
+        if "build_year" in params:
+            if re.match(r"\d{4}", params["build_year"]):
+                params["build_year"] = datetime.datetime.strptime(params['build_year'], "%Y")
+            else:
+                del params["build_year"]
+
+        del params["json_string"]
         return params
 
     def get_price(self):
         price = re.search(r"^(.*price:.*'?)$", self.soup.text, flags=re.M)
         if price is not None:
-            price = price[0] \
+            price = price[0][:-1] \
                     .split("/")[0] \
                     .strip() \
                     .replace("zł", "") \
