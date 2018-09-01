@@ -9,7 +9,7 @@ log = logging.getLogger("main")
 
 
 class Crawler:
-    def crawl(self, download=True, remove_files=False, start_page=1, end_page=30):
+    def crawl(self, download=True, remove_files=False, start_page=1, end_page=30, rent=True):
         download_path = "downloaded_files"
         download_path_searches = "searches"
         download_path_offers = "offers"
@@ -29,7 +29,7 @@ class Crawler:
                 filer.empty_dir()
 
             for service in services:
-                d = Downloader(download_path, download_path_searches, download_path_offers, service, rent=False)
+                d = Downloader(download_path, download_path_searches, download_path_offers, service, rent=rent)
                 d.download_main_pages(start_page, end_page)
 
         """

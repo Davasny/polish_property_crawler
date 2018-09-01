@@ -10,4 +10,5 @@ if __name__ == '__main__':
         remove_files=False,
         start_page=1,
         end_page=30
+        rent=True
    )
