@@ -1,19 +1,19 @@
-LOG_LEVEL = "INFO"
+LOG_LEVEL = "INFO"  # DEBUG, INFO, WARNING
 
 MYSQL = {
-    "user": "root",
-    "password": "root",
-    "host": "localhost",
-    "port": "3306",
-    "db": "crawler"
+    "user": "root",  # your DB server username
+    "password": "root",  # your DB server user password
+    "host": "localhost",  # your DB server address
+    "port": "3306",  # your DB server port
+    "db": "crawler"  # your DB name
 }
 
 FILES = {
-    "download_path_searches": "downloaded_files/searches",
-    "download_path_offers": "downloaded_files/offers"
+    "download_path_searches": "downloaded_files/searches",  # path for downloaded search result pages
+    "download_path_offers": "downloaded_files/offers"  # path for downloaded offer pages
 }
 
 DOWNLOADER = {
-    "minimal_time": 0.1,
-    "maximal_time": 0.6
+    "minimal_time": 0.1,  # minimal sleep time between requests
+    "maximal_time": 0.6  # maximal sleep time between requests
 }
