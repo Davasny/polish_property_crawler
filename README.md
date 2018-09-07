@@ -1,42 +1,33 @@
-scraper - get links to homes
-parser - page with details about home
+# Polish property crawler
 
+### About
+This program downloads and parses offers of rents and salles houses and apartments published at otodom and gratka
 
+### Usage
+1. Copy `config.py.example` to `config.py` and change values to your own
+2. Install requirements by `pip install -r requirements.txt`
+3. Run `app.py`
+
+### Available command line options
 ```
-param_price
-param_price_per_m
-param_m
-param_rooms_num
-param_floor_no
+Usage: app.py [options]
 
-private_business
-
-param_market
-param_building_type
-param_building_floors_num
-param_building_material
-param_windows_type
-param_heating
-param_build_year
-param_construction_status
-param_rent
-param_building_ownership
-param_free_from
-param_media_types
-param_security_types
-param_equipment_types
-param_extras_types
-
-coords
-```
-
-```
-mysql
-mariadb
-pgsql
-sqlite
-redis
-mongo
-cassandra
-neo4j
+Options:
+  -h, --help            show this help message and exit
+  -c CITY, --city=CITY  City to crawl [warsaw]
+  -t PROPERTY_TYPE, --type=PROPERTY_TYPE
+                        Type of property to crawl (house/apartment)
+                        [apartment]
+  -o OFFER_TYPE, --offer-type=OFFER_TYPE
+                        Type of offer type to search (rent/sell) [rent]
+  -s START_PAGE, --start-page=START_PAGE
+                        Start page of searches results [1]
+  -e END_PAGE, --end-page=END_PAGE
+                        End page of searches results [2]
+  -d DOWNLOAD_SEARCHES, --download-searches=DOWNLOAD_SEARCHES
+                        Download search result pages (True/False) [True]
+  -n DOWNLOAD_OFFERS, --download-offers=DOWNLOAD_OFFERS
+                        Download offers (True/False) [True]
+  -r REMOVE_FILES, --remove-files=REMOVE_FILES
+                        Empty dirs containing old files (True/False) [True]
 ```
