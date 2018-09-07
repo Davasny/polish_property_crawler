@@ -22,10 +22,10 @@ class Filer:
             remove(filename)
             log.debug("Removed:\t{}".format(filename))
 
-        if len(os.listdir(self._dir_path)) == 0:
+        if len(os.listdir(self._dir_path)) != 0:
             log.warning("Dir was not cleared correctly!")
-            return True
-        return False
+            return False
+        return True
 
     def make_sure_if_path_exists(self):
         if path.isdir(self._dir_path):
