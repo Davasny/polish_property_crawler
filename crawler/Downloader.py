@@ -10,19 +10,27 @@ log = logging.getLogger("main")
 
 
 class Downloader:
-    def __init__(self, download_path_searches, download_path_offers, service="otodom", rent=True):
+    def __init__(self, download_path_searches, download_path_offers, city, property_type="apartment", service="otodom", rent=True):
         self.service = service
         rent_string = "sprzedaz"
         if rent:
             rent_string = "wynajem"
 
         if service == "otodom":
-            self.url = "https://www.otodom.pl/{}/mieszkanie/krakow/".format(rent_string)
+            if property_type == "apartment":
+                property_type = "mieszkanie"
+            else:
+                property_type = "dom"
+            self.url = "https://www.otodom.pl/{}/{}/{}/".format(rent_string, property_type, city)
             self.url_search = "?search[order]=created_at_first:desc"
 
         elif service == "gratka":
-            self.url = "https://gratka.pl/nieruchomosci"
-            self.url_search = "?rodzaj-ogloszenia={}&lokalizacja_region=małopolskie&lokalizacja_miejscowosc=krakow".format(rent_string)
+            if property_type == "apartment":
+                property_type = "mieszkania"
+            else:
+                property_type = "domy"
+            self.url = "https://gratka.pl/nieruchomosci/{}".format(property_type)
+            self.url_search = "?rodzaj-ogloszenia={}&lokalizacja_miejscowosc={}".format(rent_string, city)
 
         self.download_path_searches = download_path_searches
         self.download_path_offers = download_path_offers

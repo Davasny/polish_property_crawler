@@ -10,7 +10,7 @@ log = logging.getLogger("main")
 
 
 class Crawler:
-    def __init__(self):
+    def __init__(self, city="warszawa", property_type="aparment"):
         self.download_path_searches = config.FILES['download_path_searches']
         _path_searches = Filer(self.download_path_searches)
         _path_searches.make_sure_if_path_exists()
@@ -23,6 +23,9 @@ class Crawler:
             "otodom",
             "gratka"
         ]
+
+        self.city = city
+        self.property_type = property_type
 
     def crawl(self, download_searches=True, download_offers=True,
               remove_files=False, start_page=1, end_page=30, rent=True):
@@ -37,7 +40,8 @@ class Crawler:
         if download_searches:
             log.info("Downloading files")
             for service in self.services:
-                d = Downloader(self.download_path_searches, self.download_path_offers, service, rent=rent)
+                d = Downloader(self.download_path_searches, self.download_path_offers,
+                               service=service, city=self.city, property_type=self.property_type, rent=rent)
                 d.download_main_pages(start_page, end_page)
 
         """
@@ -63,7 +67,8 @@ class Crawler:
         """
         if download_offers:
             for service in self.services:
-                d = Downloader(self.download_path_searches, self.download_path_offers, service)
+                d = Downloader(self.download_path_searches, self.download_path_offers,
+                               service=service, city=self.city)
                 progress = 0
                 total = len(all_offers[service])
                 for url in all_offers[service]:

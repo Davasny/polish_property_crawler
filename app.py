@@ -4,7 +4,7 @@ from crawler.Crawler import Crawler
 
 if __name__ == '__main__':
     logger = log.set_logger("main")
-    crawler = Crawler()
+    crawler = Crawler("warszawa", "house")
     crawler.crawl(
         download_searches=True,
         download_offers=True,
