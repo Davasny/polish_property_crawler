@@ -81,9 +81,8 @@ class Crawler:
 
         counter = 0
         for file in all_files:
-            if counter == 50:  # commit records in DB every 50 offers
+            if counter % 50 == 0:  # commit records in DB every 50 offers
                 session.commit()
-                counter = 0
             params = {}
 
             with open("{}/{}".format(self.download_path_offers, file), "r", encoding="utf-8") as f:
