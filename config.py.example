@@ -12,3 +12,8 @@ FILES = {
     "download_path_searches": "downloaded_files/searches",
     "download_path_offers": "downloaded_files/offers"
 }
+
+DOWNLOADER = {
+    "minimal_time": 0.1,
+    "maximal_time": 0.6
+}

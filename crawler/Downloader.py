@@ -3,6 +3,8 @@ import datetime
 import re
 from time import sleep
 import logging
+import config
+import random
 
 log = logging.getLogger("main")
 
@@ -27,7 +29,7 @@ class Downloader:
 
         self._s = requests.Session()
 
-    def download_main_pages(self, start_page=1, end_page=5, sleep_time=0.75):
+    def download_main_pages(self, start_page=1, end_page=5):
         """
         Both send_to_scraper and save_local can not be false at the same time
         """
@@ -47,7 +49,7 @@ class Downloader:
             filename = self.generate_file_name(self.download_path_searches)
 
             self.get_site_to_file(url=url, filename=filename)
-            sleep(sleep_time)
+            sleep(self.randomize_wait_time())
         return True
 
     def download_offer_page(self, offer_link):
@@ -88,3 +90,9 @@ class Downloader:
         else:
             log.error("Response:\t".format(response.status_code))
             return False
+
+    def randomize_wait_time(self):
+        time = random.uniform(config.DOWNLOADER['minimal_time'], config.DOWNLOADER['maximal_time'])
+        if time is not None:
+            return time
+        return 0.75
