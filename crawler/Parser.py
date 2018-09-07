@@ -93,9 +93,11 @@ class ParserOtodom:
 
     def get_description(self):
         desc = ""
-        for p in self.soup.find("div", {"itemprop": "description"}).find_all("p"):
-            if p.text != "":
-                desc += "</br>{}".format(p.text)
+        div = self.soup.find("div", {"itemprop": "description"})
+        if div is not None:
+            for p in div.find_all("p"):
+                if p.text != "":
+                    desc += "</br>{}".format(p.text)
         return desc
 
     def parse_json(self, keyword):
