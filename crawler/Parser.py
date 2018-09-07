@@ -74,7 +74,8 @@ class ParserOtodom:
         params["description"] = self.get_description()
         params["source"] = "otodom"
 
-        params["title"] = base64.b64decode(params["title"]).decode("utf-8")
+        if "title" in params:
+            params["title"] = base64.b64decode(params["title"]).decode("utf-8")
 
         if "build_year" in params:
             if re.match(r"\d{4}", params["build_year"]):
