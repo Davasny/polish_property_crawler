@@ -52,10 +52,8 @@ class ParserOtodom:
 
     def parse_site(self):
         """
-        ninja has under_line
-        gpt has camelCase
-
-        :return: dictionary with lists and etc.
+        window.ninjaPV has under_line
+        GPT.targeting has camelCase
         """
         ninja = self.parse_json("window.ninjaPV")
         gpt = self.parse_json("GPT.targeting")
