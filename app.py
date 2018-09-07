@@ -53,9 +53,9 @@ if __name__ == '__main__':
 
     crawler = Crawler(opt.city, opt.property_type)
     crawler.crawl(
-            download_searches=opt.download_searches,
-            download_offers=opt.download_offers,
-            remove_files=opt.remove_files,
+            download_searches=opt.download_searches.lower() in "true",
+            download_offers=opt.download_offers.lower() in "true",
+            remove_files=opt.remove_files.lower() in "true",
             start_page=opt.start_page,
             end_page=opt.end_page,
             rent=opt.offer_type
