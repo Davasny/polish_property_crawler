@@ -21,6 +21,12 @@ class Filer:
             filename = "{}/{}".format(self._dir_path, file)
             remove(filename)
             log.debug("Removed:\t{}".format(filename))
+
+        if len(os.listdir(self._dir_path)) == 0:
+            log.warning("Dir was not cleared correctly!")
+            return True
+        return False
+
     def make_sure_if_path_exists(self):
         if path.isdir(self._dir_path):
             return True
