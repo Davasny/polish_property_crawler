@@ -36,17 +36,17 @@ if __name__ == '__main__':
 
     parser.add_option("-d", "--download-searches",
                       dest="download_searches",
-                      default=True,
+                      default="True",
                       help="Download search result pages (True/False) [True]")
 
     parser.add_option("-n", "--download-offers",
                       dest="download_offers",
-                      default=True,
+                      default="True",
                       help="Download offers (True/False) [True]")
 
     parser.add_option("-r", "--remove-files",
                       dest="remove_files",
-                      default=True,
+                      default="True",
                       help="Empty dirs containing old files (True/False) [True]")
 
     opt, _ = parser.parse_args()
