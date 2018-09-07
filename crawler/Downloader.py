@@ -25,7 +25,7 @@ class Downloader:
         self.download_path_searches = download_path_searches
         self.download_path_offers = download_path_offers
 
-        self.s = requests.Session()
+        self._s = requests.Session()
 
     def download_main_pages(self, start_page=1, end_page=5, sleep_time=0.75):
         """
@@ -77,7 +77,7 @@ class Downloader:
                           'Chrome/66.0.3359.139 Safari/537.36 OPR/53.0.2907.37',
         }
         log.debug("Sending request")
-        response = self.s.get(url=url, headers=headers)
+        response = self._s.get(url=url, headers=headers)
         if response.status_code == 200:
             log.debug("Recived 200, saving to:\t{}".format(filename))
 
