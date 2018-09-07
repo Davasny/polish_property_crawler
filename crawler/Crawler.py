@@ -13,11 +13,11 @@ class Crawler:
     def __init__(self):
         self.download_path_searches = config.FILES['download_path_searches']
         _path_searches = Filer(self.download_path_searches)
-        _path_searches.make_sure_path_exists()
+        _path_searches.make_sure_if_path_exists()
 
         self.download_path_offers = config.FILES['download_path_offers']
         _path_offers = Filer(self.download_path_offers)
-        _path_offers.make_sure_path_exists()
+        _path_offers.make_sure_if_path_exists()
 
         self.services = [
             "otodom",
