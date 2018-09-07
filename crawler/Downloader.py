@@ -38,9 +38,6 @@ class Downloader:
         self._s = requests.Session()
 
     def download_main_pages(self, start_page=1, end_page=5):
-        """
-        Both send_to_scraper and save_local can not be false at the same time
-        """
         if start_page <= 0:
             log.error("Incorrect start page\t{}".format(start_page))
             return False
