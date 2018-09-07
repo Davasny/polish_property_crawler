@@ -30,13 +30,6 @@ class Downloader:
     def download_main_pages(self, start_page=1, end_page=5, sleep_time=0.75):
         """
         Both send_to_scraper and save_local can not be false at the same time
-
-        :param start_page:
-        :param end_page:
-        :param save_local:
-        :param send_do_scraper:
-        :param sleep_time:
-        :return:
         """
         if start_page <= 0:
             log.error("Incorrect start page\t{}".format(start_page))
