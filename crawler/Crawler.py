@@ -4,57 +4,66 @@ from crawler.Scraper import Scraper
 from crawler.Parser import ParserOtodom, ParserGratka
 from crawler.Database import session, Offer
 import logging
+import config
 
 log = logging.getLogger("main")
 
 
 class Crawler:
-    def crawl(self, download=True, remove_files=False, start_page=1, end_page=30, rent=True):
-        download_path = "downloaded_files"
-        download_path_searches = "searches"
-        download_path_offers = "offers"
+    def __init__(self):
+        self.download_path_searches = config.FILES['download_path_searches']
+        _path_searches = Filer(self.download_path_searches)
+        _path_searches.make_sure_path_exists()
 
-        services = [
+        self.download_path_offers = config.FILES['download_path_offers']
+        _path_offers = Filer(self.download_path_offers)
+        _path_offers.make_sure_path_exists()
+
+        self.services = [
             "otodom",
             "gratka"
         ]
 
-        if download:
+    def crawl(self, download_searches=True, download_offers=True,
+              remove_files=False, start_page=1, end_page=30, rent=True):
+        if remove_files:
+            log.info("Removing files")
+            filer = Filer(self.download_path_offers)
+            filer.empty_dir()
+
+            filer = Filer(self.download_path_searches)
+            filer.empty_dir()
+
+        if download_searches:
             log.info("Downloading files")
-            if remove_files:
-                filer = Filer("{}/{}".format(download_path, download_path_offers))
-                filer.empty_dir()
-
-                filer = Filer("{}/{}".format(download_path, download_path_searches))
-                filer.empty_dir()
-
-            for service in services:
-                d = Downloader(download_path, download_path_searches, download_path_offers, service, rent=rent)
+            for service in self.services:
+                d = Downloader(self.download_path_searches, self.download_path_offers, service, rent=rent)
                 d.download_main_pages(start_page, end_page)
 
         """
         Get all links to offers
         """
-        filer = Filer("{}/{}".format(download_path, download_path_searches))
+        filer_searches = Filer(self.download_path_searches)
         all_offers = {}
-        all_files = filer.get_all_files()
 
-        for service in services:
-            all_offers[service] = []
-            for file in all_files:
-                if service in file:
-                    with open("{}/{}/{}".format(download_path, download_path_searches, file), "r", encoding="utf-8") as f:
-                        scraper = Scraper(f.read(), service)
-                        for link in scraper.get_search_results():
-                            all_offers[service].append(link)
-        log.debug("Found links:\t{}".format(len(all_offers)))
+        for service in self.services :
+            if service not in all_offers:
+                all_offers[service] = []
+
+            for file in filer_searches.get_all_files():
+                with open("{}/{}".format(self.download_path_searches, file), "r", encoding="utf-8") as f:
+                    scraper = Scraper(f.read(), service)
+                    for link in scraper.get_search_results():
+                        all_offers[service].append(link)
+
+        log.debug("Links to offers:\t{}".format(len(all_offers)))
 
         """
         Download offers
         """
-        if download:
-            for service in services:
-                d = Downloader(download_path, download_path_searches, download_path_offers, service)
+        if download_offers:
+            for service in self.services:
+                d = Downloader(self.download_path_searches, self.download_path_offers, service)
                 progress = 0
                 total = len(all_offers[service])
                 for url in all_offers[service]:
@@ -62,29 +71,30 @@ class Crawler:
                         progress += 1
                     log.info("Downloaded:\t{}/{}".format(progress, total))
 
-        filer = Filer("{}/{}".format(download_path, download_path_offers))
+        filer = Filer(self.download_path_offers)
         all_files = filer.get_all_files()
 
         counter = 0
-
         for file in all_files:
-            if counter == 50:
+            if counter == 50:  # commit records in DB every 50 offers
                 session.commit()
                 counter = 0
             params = {}
 
-            with open("{}/{}/{}".format(download_path, download_path_offers, file), "r", encoding="utf-8") as f:
+            with open("{}/{}".format(self.download_path_offers, file), "r", encoding="utf-8") as f:
                 if "gratka" in file:
-                    log.debug("Parsing file:\t{}".format(file))
+                    log.debug("Parsing gratka file:\t{}".format(file))
                     parser = ParserGratka(f.read())
                     params = parser.parse_site()
 
                 elif "otodom" in file:
-                    log.debug("Parsing file:\t{}".format(file))
+                    log.debug("Parsing otodom file:\t{}".format(file))
                     parser = ParserOtodom(f.read())
                     params = parser.parse_site()
 
-                instance = session.query(Offer).filter(Offer.offer_id == params['offer_id']).first()
-                if not instance:
-                    session.add(Offer(**params))
+                if "offer_id" in params:
+                    instance = session.query(Offer).filter(Offer.offer_id == params['offer_id']).first()
+                    if not instance:
+                        session.add(Offer(**params))
             counter += 1
+        session.commit()
