@@ -74,7 +74,7 @@ class Crawler:
                 for url in all_offers[service]:
                     if d.download_offer_page(url):
                         progress += 1
-                    log.info("Downloaded:\t{}/{}".format(progress, total))
+                    log.info("Downloaded [{}]:\t{}/{}".format(service, progress, total))
 
         filer = Filer(self.download_path_offers)
         all_files = filer.get_all_files()
