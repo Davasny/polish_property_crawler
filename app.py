@@ -9,7 +9,7 @@ if __name__ == '__main__':
     parser = optparse.OptionParser()
     parser.add_option("-c", "--city",
                       dest="city",
-                      default="warsaw",
+                      default="warszawa",
                       help="City to crawl [warsaw]")
 
     parser.add_option("-t", "--type",
