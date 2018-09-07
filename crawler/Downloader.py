@@ -8,7 +8,7 @@ log = logging.getLogger("main")
 
 
 class Downloader:
-    def __init__(self, download_path, download_path_searches, download_path_offers, service="otodom", rent=True):
+    def __init__(self, download_path_searches, download_path_offers, service="otodom", rent=True):
         self.service = service
         rent_string = "sprzedaz"
         if rent:
@@ -22,7 +22,6 @@ class Downloader:
             self.url = "https://gratka.pl/nieruchomosci"
             self.url_search = "?rodzaj-ogloszenia={}&lokalizacja_region=małopolskie&lokalizacja_miejscowosc=krakow".format(rent_string)
 
-        self.download_path = download_path
         self.download_path_searches = download_path_searches
         self.download_path_offers = download_path_offers
 
@@ -73,8 +72,7 @@ class Downloader:
         return True
 
     def generate_file_name(self, path):
-        return "{}/{}/{}_{}.html".format(
-            self.download_path,
+        return "{}/{}_{}.html".format(
             path,
             self.service,
             datetime.datetime.now().timestamp())

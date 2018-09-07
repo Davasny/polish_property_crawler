@@ -7,3 +7,8 @@ MYSQL = {
     "port": "3306",
     "db": "crawler"
 }
+
+FILES = {
+    "download_path_searches": "downloaded_files/searches",
+    "download_path_offers": "downloaded_files/offers"
+}
