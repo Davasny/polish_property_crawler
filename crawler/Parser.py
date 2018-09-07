@@ -1,5 +1,4 @@
 from bs4 import BeautifulSoup as bs
-import re
 import json
 import base64
 import logging
