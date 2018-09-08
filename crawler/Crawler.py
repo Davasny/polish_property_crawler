@@ -101,7 +101,7 @@ class Crawler:
                 if "offer_id" in params:
                     instance = session.query(Offer).filter(Offer.offer_id == params['offer_id']).first()
                     if not instance:
-                        log.info("Adding offer:\t{}/{}".format(counter, len(all_files)))
+                        log.info("Adding offer:\t{}\t{}/{}".format(params['offer_id'], counter, len(all_files)))
                         session.add(Offer(**params))
             counter += 1
         session.commit()
