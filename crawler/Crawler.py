@@ -70,15 +70,17 @@ class Crawler:
                 d = Downloader(self.download_path_searches, self.download_path_offers,
                                service=service, city=self.city)
                 progress = 0
-                total = len(all_offers[service])
                 for url in all_offers[service]:
                     if d.download_offer_page(url):
                         progress += 1
-                    log.info("Downloaded [{}]:\t{}/{}".format(service, progress, total))
+                    log.info("Downloaded [{}]:\t{}/{}".format(service, progress, len(all_offers[service])))
 
         filer = Filer(self.download_path_offers)
         all_files = filer.get_all_files()
 
+        """
+        Add offers to DB
+        """
         counter = 0
         for file in all_files:
             if counter % 50 == 0:  # commit records in DB every 50 offers
