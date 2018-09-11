@@ -1,16 +1,26 @@
-import requests
 import datetime
+import logging
+import random
 import re
 from time import sleep
-import logging
+
+import requests
+
 import config
-import random
 
 log = logging.getLogger("main")
 
 
 class Downloader:
-    def __init__(self, download_path_searches, download_path_offers, city, property_type="apartment", service="otodom", rent=True):
+    def __init__(
+            self,
+            download_path_searches,
+            download_path_offers,
+            city,
+            property_type="apartment",
+            service="otodom",
+            rent=True,
+    ):
         self.service = service
         rent_string = "sprzedaz"
         if rent:
@@ -47,7 +57,6 @@ class Downloader:
             return False
 
         for page_num in range(start_page, end_page):
-
             url = "{}{}&page={}".format(self.url, self.url_search, page_num)
             log.info("Downloading:\t{}".format(url))
 
