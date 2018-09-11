@@ -1,10 +1,11 @@
+import logging
+
+import config
+from crawler.database import session, Offer
 from crawler.downloader import Downloader
 from crawler.filer import Filer
-from crawler.scraper import Scraper
 from crawler.parser import ParserOtodom, ParserGratka
-from crawler.database import session, Offer
-import logging
-import config
+from crawler.scraper import Scraper
 
 log = logging.getLogger("main")
 
@@ -50,7 +51,7 @@ class Crawler:
         filer_searches = Filer(self.download_path_searches)
         all_offers = {}
 
-        for service in self.services :
+        for service in self.services:
             if service not in all_offers:
                 all_offers[service] = []
 

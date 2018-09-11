@@ -1,9 +1,10 @@
-from bs4 import BeautifulSoup as bs
-import json
 import base64
-import logging
 import datetime
+import json
+import logging
 import re
+
+from bs4 import BeautifulSoup as bs
 
 log = logging.getLogger("main")
 
@@ -207,13 +208,13 @@ class ParserGratka:
         price = re.search(r"^(.*price:.*'?)$", self.soup.text, flags=re.M)
         if price is not None:
             price = price[0][:-1] \
-                    .split("/")[0] \
-                    .strip() \
-                    .replace("zł", "") \
-                    .replace("price:", "") \
-                    .replace(",",".")\
-                    .replace(" ", "")\
-                    .replace("'", "")
+                .split("/")[0] \
+                .strip() \
+                .replace("zł", "") \
+                .replace("price:", "") \
+                .replace(",", ".") \
+                .replace(" ", "") \
+                .replace("'", "")
             return price
         return 0
 
@@ -228,10 +229,10 @@ class ParserGratka:
         latitude_match = re.search(r"^(.*latitude:.*[0-9].)$", self.soup.text, flags=re.M)
 
         if longitude_match is not None:
-            longitude = longitude_match[0].replace("longitude:", "").replace(" ", "").replace(",","")
+            longitude = longitude_match[0].replace("longitude:", "").replace(" ", "").replace(",", "")
 
         if latitude_match is not None:
-            latitude = latitude_match[0].replace("latitude:", "").replace(" ", "").replace(",","")
+            latitude = latitude_match[0].replace("latitude:", "").replace(" ", "").replace(",", "")
 
         return longitude, latitude
 
@@ -244,4 +245,3 @@ class ParserGratka:
     def parse_localization(self, location_string):
         splitted = location_string.split(",")
         return splitted[0], splitted[1]
-

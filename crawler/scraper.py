@@ -5,6 +5,7 @@ class Scraper:
     """
     Its only purpose is to get all links and titles from search results
     """
+
     def __init__(self, site_string, service):
         self.service = service
         if len(site_string) > 0:
