@@ -1,8 +1,8 @@
-from crawler.Downloader import Downloader
-from crawler.Filer import Filer
-from crawler.Scraper import Scraper
-from crawler.Parser import ParserOtodom, ParserGratka
-from crawler.Database import session, Offer
+from crawler.downloader import Downloader
+from crawler.filer import Filer
+from crawler.scraper import Scraper
+from crawler.parser import ParserOtodom, ParserGratka
+from crawler.database import session, Offer
 import logging
 import config
 
