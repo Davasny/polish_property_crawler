@@ -1,6 +1,6 @@
 import log
 import optparse
-from crawler.Crawler import Crawler
+from crawler.crawler import Crawler
 
 
 if __name__ == '__main__':
