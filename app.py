@@ -1,62 +1,41 @@
-import log
-import optparse
-from crawler.crawler import Crawler
+"""Usage: app.py [options]
 
+Options:
+  -h, --help            show this help message and exit
+  -c CITY --city=CITY  City to crawl [default: warsaw]
+  -t PROPERTY_TYPE --type=PROPERTY_TYPE
+                        Type of property to crawl (house/apartment)
+                        [default: apartment]
+  -o OFFER_TYPE --offer-type=OFFER_TYPE
+                        Type of offer type to search (rent/sell) [default: rent]
+  -s START_PAGE --start-page=START_PAGE
+                        Start page of searches results [default: 1]
+  -e END_PAGE --end-page=END_PAGE
+                        End page of searches results [default: 2]
+  -nds --not-download-searches
+                        Do not download search result pages [default: False]
+  -ndo --not-download-offers
+                        Do not download offers [default False]
+  -nr --not-remove-files     Do not empty dirs containing old files [default: False]
+"""
+from docopt import docopt
+
+import log
+from crawler.crawler import Crawler
 
 if __name__ == '__main__':
     logger = log.set_logger("main")
+    arguments = docopt(__doc__)
+    integer_params = ['--start-page', '--end-page']
+    for i in integer_params:
+        arguments[i] = int(arguments[i])
 
-    parser = optparse.OptionParser()
-    parser.add_option("-c", "--city",
-                      dest="city",
-                      default="warszawa",
-                      help="City to crawl [warsaw]")
-
-    parser.add_option("-t", "--type",
-                      dest="property_type",
-                      default="apartment",
-                      help="Type of property to crawl (house/apartment) [apartment]")
-
-    parser.add_option("-o", "--offer-type",
-                      dest="offer_type",
-                      default="rent",
-                      help="Type of offer type to search (rent/sell) [rent]")
-
-    parser.add_option("-s", "--start-page",
-                      dest="start_page",
-                      type="int",
-                      default=1,
-                      help="Start page of searches results [1]")
-
-    parser.add_option("-e", "--end-page",
-                      dest="end_page",
-                      type="int",
-                      default=2,
-                      help="End page of searches results [2]")
-
-    parser.add_option("-d", "--download-searches",
-                      dest="download_searches",
-                      default="True",
-                      help="Download search result pages (True/False) [True]")
-
-    parser.add_option("-n", "--download-offers",
-                      dest="download_offers",
-                      default="True",
-                      help="Download offers (True/False) [True]")
-
-    parser.add_option("-r", "--remove-files",
-                      dest="remove_files",
-                      default="True",
-                      help="Empty dirs containing old files (True/False) [True]")
-
-    opt, _ = parser.parse_args()
-
-    crawler = Crawler(opt.city, opt.property_type)
+    crawler = Crawler(arguments['--city'], arguments['--type'])
     crawler.crawl(
-            download_searches=opt.download_searches.lower() in "true",
-            download_offers=opt.download_offers.lower() in "true",
-            remove_files=opt.remove_files.lower() in "true",
-            start_page=opt.start_page,
-            end_page=opt.end_page,
-            rent=opt.offer_type
-       )
+        download_searches=not arguments['--not-download-searches'],
+        download_offers=not arguments['--not-download-offers'],
+        remove_files=not arguments['--not-remove-files'],
+        start_page=arguments['--start-page'],
+        end_page=arguments['--end-page'],
+        rent=arguments['--offer-type'],
+    )
